@@ -10,6 +10,7 @@ services:
       - NODE_ENV=production
       - HOST=0.0.0.0
       - PORT=3847
+      - BODY_SIZE_LIMIT=100M
     ports:
       - "3847:3847"
     volumes:

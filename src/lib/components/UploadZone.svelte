@@ -3,8 +3,12 @@
 		file: File;
 		progress: number;
 		status: 'pending' | 'uploading' | 'done' | 'error';
+		retries: number;
 		error?: string;
 	};
+
+	const MAX_CONCURRENT_UPLOADS = 4;
+	const MAX_RETRIES = 2;
 
 	let {
 		eventSlug,
@@ -22,16 +26,19 @@
 	let uploaderName = $state('');
 	let isDragOver = $state(false);
 	let fileInput = $state<HTMLInputElement>(undefined!);
+	let activeUploads = $state(0);
+	let completionNotified = $state(false);
 
 	function handleFiles(fileList: FileList | null) {
 		if (!fileList) return;
 		const newFiles: UploadFile[] = Array.from(fileList).map((f) => ({
 			file: f,
 			progress: 0,
+			retries: 0,
 			status: 'pending' as const
 		}));
 		files = [...files, ...newFiles];
-		uploadAll();
+		startUploadQueue();
 	}
 
 	function handleDrop(e: DragEvent) {
@@ -45,11 +52,11 @@
 		isDragOver = true;
 	}
 
-	function uploadAll() {
-		for (let i = 0; i < files.length; i++) {
-			if (files[i].status === 'pending') {
-				uploadFile(i);
-			}
+	function startUploadQueue() {
+		while (activeUploads < MAX_CONCURRENT_UPLOADS) {
+			const nextIndex = files.findIndex((f) => f.status === 'pending');
+			if (nextIndex === -1) break;
+			uploadFile(nextIndex);
 		}
 	}
 
@@ -57,6 +64,7 @@
 		const entry = files[index];
 		if (!entry || entry.status !== 'pending') return;
 
+		activeUploads += 1;
 		files[index] = { ...entry, status: 'uploading' };
 
 		const formData = new FormData();
@@ -75,19 +83,57 @@
 		xhr.onload = () => {
 			if (xhr.status >= 200 && xhr.status < 300) {
 				files[index] = { ...files[index], status: 'done', progress: 100 };
+				activeUploads -= 1;
+				startUploadQueue();
 			} else {
+				const canRetry =
+					files[index].retries < MAX_RETRIES &&
+					(xhr.status === 0 || xhr.status === 429 || xhr.status >= 500);
+				if (canRetry) {
+					files[index] = {
+						...files[index],
+						status: 'pending',
+						error: undefined,
+						retries: files[index].retries + 1
+					};
+					activeUploads -= 1;
+					setTimeout(() => {
+						startUploadQueue();
+					}, 400 * files[index].retries);
+					return;
+				}
+
 				let errorMsg = 'Upload failed';
 				try {
 					const resp = JSON.parse(xhr.responseText);
 					errorMsg = resp.error || errorMsg;
 				} catch {}
 				files[index] = { ...files[index], status: 'error', error: errorMsg };
+				activeUploads -= 1;
+				startUploadQueue();
 			}
 			checkAllDone();
 		};
 
 		xhr.onerror = () => {
+			const canRetry = files[index].retries < MAX_RETRIES;
+			if (canRetry) {
+				files[index] = {
+					...files[index],
+					status: 'pending',
+					error: undefined,
+					retries: files[index].retries + 1
+				};
+				activeUploads -= 1;
+				setTimeout(() => {
+					startUploadQueue();
+				}, 400 * files[index].retries);
+				return;
+			}
+
 			files[index] = { ...files[index], status: 'error', error: 'Network error' };
+			activeUploads -= 1;
+			startUploadQueue();
 			checkAllDone();
 		};
 
@@ -95,7 +141,8 @@
 	}
 
 	function checkAllDone() {
-		if (files.every((f) => f.status === 'done' || f.status === 'error')) {
+		if (!completionNotified && files.every((f) => f.status === 'done' || f.status === 'error')) {
+			completionNotified = true;
 			const hasSuccess = files.some((f) => f.status === 'done');
 			if (hasSuccess) {
 				setTimeout(() => {
@@ -109,6 +156,7 @@
 		if (files.some((f) => f.status === 'uploading')) return;
 		open = false;
 		files = [];
+		completionNotified = false;
 	}
 
 	function formatSize(bytes: number) {
