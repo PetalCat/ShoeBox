@@ -5,11 +5,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		csrf: {
-			trustedOrigins: [
-				'http://docker.example.local:3847',
-				'http://localhost:3847',
-				'http://127.0.0.1:3847'
-			]
+			trustedOrigins: ['*']
 		}
 	}
 };
