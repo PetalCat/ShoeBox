@@ -13,7 +13,7 @@ docker compose up -d --build
 ```
 
 App URL:
-- `http://localhost:3000`
+- `http://docker.example.local:3847` (LAN-only bind; proxy/forward from here)
 
 Useful commands:
 
@@ -31,6 +31,8 @@ docker compose down --remove-orphans
 Notes:
 - SQLite DB and uploaded media are persisted in `./data` on your host.
 - The container includes `ffmpeg` so video poster/probe features continue to work.
+- App is bound to `docker.example.local:3847` for LAN access.
+- For local/LAN direct access, use relative frontend URLs (for example `/login`), not absolute URLs.
 
 ## Local Dev (without Docker)
 
