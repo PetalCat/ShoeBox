@@ -4,14 +4,14 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: shoebox-app
-    ports:
-      - "3000:3000"
     env_file:
       - .env
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
       - PORT=3000
+    ports:
+      - "10.10.10.14:3847:3000"
     volumes:
       - ./data:/app/data
     restart: unless-stopped
