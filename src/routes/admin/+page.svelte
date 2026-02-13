@@ -43,7 +43,7 @@
 
 {#if data.events.length === 0}
 	<div class="py-16 text-center">
-		<img src="/logo.png" alt="No events" class="mx-auto mb-4 h-16 opacity-50" />
+		<img src="/logo.png" alt="No events" class="pixel-art mx-auto mb-4 h-[60px] w-[120px] opacity-50" />
 		<h2 class="mb-1 font-bold text-kraft-700">No events yet</h2>
 		<p class="text-sm text-kraft-500">Create your first event to start collecting photos!</p>
 	</div>

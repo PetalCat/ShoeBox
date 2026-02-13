@@ -96,6 +96,11 @@ img[loading='lazy'] {
 	image-rendering: pixelated;
 }
 
+/* Force nearest-neighbor scaling for pixel art logos/icons */
+.pixel-art {
+	image-rendering: pixelated;
+}
+
 /* Subtle divider */
 .pixel-divider {
 	border: none;
