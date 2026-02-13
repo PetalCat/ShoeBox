@@ -34,6 +34,7 @@ Notes:
 - App is bound to `docker.example.local:3847` for LAN access.
 - For local/LAN direct access, use relative frontend URLs (for example `/login`), not absolute URLs.
 - Set `ORIGIN` in `.env` to the exact browser URL (for example `http://docker.example.local:3847`). Update it to your public `https://...` origin when you move behind VPS/Caddy.
+- SvelteKit CSRF trusted origins are set for local URLs on port `3847` (`docker.example.local`, `localhost`, `127.0.0.1`).
 
 ## Local Dev (without Docker)
 
