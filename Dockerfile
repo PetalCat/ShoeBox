@@ -22,9 +22,9 @@ COPY --from=build /app/build ./build
 COPY package.json ./
 
 RUN mkdir -p /app/data
-EXPOSE 3000
+EXPOSE 3847
 
 ENV HOST=0.0.0.0
-ENV PORT=3000
+ENV PORT=3847
 
 CMD ["node", "build"]
