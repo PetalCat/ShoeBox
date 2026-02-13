@@ -34,6 +34,7 @@ Notes:
 - App is bound to `10.10.10.14:3847` for LAN access.
 - For local/LAN direct access, use relative frontend URLs (for example `/login`), not absolute URLs.
 - Set `ORIGIN` in `.env` to the exact browser URL (for example `http://10.10.10.14:3847`). Update it to your public `https://...` origin when you move behind VPS/Caddy.
+- SvelteKit CSRF trusted origins are set for local URLs on port `3847` (`10.10.10.14`, `localhost`, `127.0.0.1`).
 
 ## Local Dev (without Docker)
 
