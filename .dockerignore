@@ -1,0 +1,13 @@
+.git
+.gitignore
+.svelte-kit
+node_modules
+build
+.DS_Store
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+data
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

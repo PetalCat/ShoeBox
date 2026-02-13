@@ -1,0 +1,150 @@
+@import 'tailwindcss';
+
+@theme {
+	--font-sans: 'Pixelify Sans', ui-sans-serif, system-ui, sans-serif;
+
+	--color-cream-50: #faf6eb;
+	--color-cream-100: #f2ecdb;
+	--color-cream-200: #e8dfc8;
+	--color-cream-300: #d4c8a8;
+
+	--color-kraft-300: #b09878;
+	--color-kraft-400: #907858;
+	--color-kraft-500: #786040;
+	--color-kraft-600: #604830;
+	--color-kraft-700: #483020;
+	--color-kraft-800: #302018;
+
+	--color-coral-400: #ff8860;
+	--color-coral-500: #f06030;
+	--color-coral-600: #d04820;
+	--color-coral-700: #b03818;
+
+	--color-pixel-bg: #f7f2e4;
+	--color-pixel-border: #c0a880;
+	--color-pixel-border-dark: #907050;
+}
+
+body {
+	font-family: var(--font-sans);
+	background-color: var(--color-cream-50);
+	color: var(--color-kraft-800);
+}
+
+/* --- Pixel panel: game-UI inspired container --- */
+.pixel-panel {
+	background: var(--color-pixel-bg);
+	border: 2px solid var(--color-pixel-border);
+	box-shadow:
+		inset 1px 1px 0 rgba(255, 255, 255, 0.5),
+		inset -1px -1px 0 var(--color-pixel-border-dark),
+		3px 3px 0 rgba(0, 0, 0, 0.08);
+	border-radius: 4px;
+}
+
+/* Raised button style */
+.pixel-btn {
+	border: 2px solid var(--color-pixel-border-dark);
+	border-radius: 4px;
+	box-shadow:
+		inset 1px 1px 0 rgba(255, 255, 255, 0.3),
+		2px 2px 0 rgba(0, 0, 0, 0.1);
+	transition:
+		transform 0.05s,
+		box-shadow 0.05s;
+}
+.pixel-btn:active {
+	transform: translate(1px, 1px) !important;
+	box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Accent button (coral) */
+.pixel-btn-primary {
+	background: var(--color-coral-500);
+	color: white;
+	border: 2px solid var(--color-coral-700);
+	border-radius: 4px;
+	box-shadow:
+		inset 1px 1px 0 rgba(255, 255, 255, 0.25),
+		2px 2px 0 rgba(0, 0, 0, 0.12);
+	transition:
+		transform 0.05s,
+		box-shadow 0.05s;
+}
+.pixel-btn-primary:hover {
+	background: var(--color-coral-600);
+}
+.pixel-btn-primary:active {
+	transform: translate(1px, 1px) !important;
+	box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Pixel input */
+.pixel-input {
+	background: white;
+	border: 2px solid var(--color-pixel-border);
+	border-radius: 3px;
+	box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.06);
+}
+.pixel-input:focus {
+	border-color: var(--color-coral-500);
+	outline: none;
+}
+
+/* Pixelate thumbnails */
+img[loading='lazy'] {
+	image-rendering: pixelated;
+}
+
+/* Subtle divider */
+.pixel-divider {
+	border: none;
+	border-top: 2px solid var(--color-pixel-border);
+	opacity: 0.5;
+}
+
+/* Pixel checkboxes */
+input[type='checkbox'] {
+	appearance: none;
+	width: 20px;
+	height: 20px;
+	background: white;
+	border: 2px solid var(--color-pixel-border-dark);
+	border-radius: 2px !important;
+	cursor: pointer;
+	position: relative;
+	flex-shrink: 0;
+}
+input[type='checkbox']:checked {
+	background: var(--color-coral-500);
+	border-color: var(--color-coral-700);
+}
+input[type='checkbox']:checked::after {
+	content: '';
+	position: absolute;
+	left: 4px;
+	top: 1px;
+	width: 6px;
+	height: 10px;
+	border: solid white;
+	border-width: 0 2.5px 2.5px 0;
+	transform: rotate(45deg);
+}
+
+/* Retro selection */
+::selection {
+	background: var(--color-coral-500);
+	color: white;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+}
+::-webkit-scrollbar-track {
+	background: var(--color-cream-200);
+}
+::-webkit-scrollbar-thumb {
+	background: var(--color-kraft-400);
+	border-radius: 2px;
+}
